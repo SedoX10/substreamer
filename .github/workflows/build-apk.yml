@@ -24,14 +24,16 @@ jobs:
           cache: true
 
       - name: Get dependencies
+        working-directory: substreamer
         run: flutter pub get
 
       - name: Build APK
+        working-directory: substreamer
         run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: substreamer-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: substreamer/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 7
