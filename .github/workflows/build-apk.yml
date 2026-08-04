@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CI: true
+      CI: 1
 
     steps:
       - name: Checkout repository
@@ -31,23 +31,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Expo Prebuild (Bare Release)
-        run: npx expo prebuild --platform android --template bare-minimum --non-interactive
+      - name: Expo Prebuild
+        run: npx expo prebuild --platform android --clean
 
-      - name: Disable R8/ProGuard to prevent freeze
-        run: |
-          echo "android.enableR8=false" >> android/gradle.properties
-          echo "android.enableMinificationInReleaseBuilds=false" >> android/gradle.properties
-
-      - name: Build Standalone Release APK
+      - name: Build Standalone Release APK (Disable R8)
         run: |
           cd android
-          ./gradlew assembleRelease --no-daemon -x test -x minifyReleaseWithR8
+          ./gradlew assembleRelease --no-daemon -x test -PminifyEnabled=false
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: substreamer-apk
-          path: |
-            android/app/build/outputs/apk/release/*.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
           retention-days: 7
