@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/TrackPlayer.kt b/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/TrackPlayer.kt
+index b85ed0e..a477e8e 100644
+--- a/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/TrackPlayer.kt
++++ b/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/TrackPlayer.kt
+@@ -377,7 +377,7 @@ class TrackPlayer : HybridTrackPlayerSpec(), PlaybackEngineDelegate {
+       // the freshly-rebuilt service automatically; without this the
+       // consumer's JS-side carService is left talking to a dead
+       // binder reference until the user explicitly re-binds.
+-      scheduleRebindIfNeeded()
++      //scheduleRebindIfNeeded()
+     }
+   }
+ 
