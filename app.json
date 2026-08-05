@@ -50,7 +50,6 @@
         "POST_NOTIFICATIONS"
       ],
       "predictiveBackGestureEnabled": false,
-      "stopWithTask": true,
       "versionCode": 80000176,
       "package": "com.ghenry22.substream2"
     },
