@@ -1,55 +1,46 @@
 name: Build Android APK
-
 on:
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       CI: 1
       GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m"
-
+      ORG_GRADLE_PROJECT_reactNativeArchitectures: arm64-v8a
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-
       - name: Setup Gradle Cache
         uses: gradle/actions/setup-gradle@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-
       - name: Install dependencies
         run: npm ci
-
       - name: Expo Prebuild
         run: npx expo prebuild --platform android --clean
-
       - name: Force Disable Minification/R8 in Gradle
         run: |
           sed -i 's/minifyEnabled true/minifyEnabled false/g' android/app/build.gradle
           sed -i 's/shrinkResources true/shrinkResources false/g' android/app/build.gradle
           echo "android.enableR8=false" >> android/gradle.properties
-
+          echo "org.gradle.caching=true" >> android/gradle.properties
+          echo "org.gradle.parallel=true" >> android/gradle.properties
       - name: Build Standalone Release APK
         run: |
           cd android
-          ./gradlew assembleRelease --no-daemon -x test
-
+          ./gradlew assembleRelease --no-daemon -x test -x lintVitalRelease --build-cache
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: substreamer-apk
           path: android/app/build/outputs/apk/release/app-release.apk
           retention-days: 7
-          
