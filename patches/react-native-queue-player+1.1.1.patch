@@ -1,3 +1,15 @@
+diff --git a/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/PlaybackService.kt b/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/PlaybackService.kt
+index bf02d9c..0df1e49 100644
+--- a/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/PlaybackService.kt
++++ b/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/PlaybackService.kt
+@@ -1083,6 +1083,7 @@ class PlaybackService : HeadlessJsMediaService() {
+     mediaSession?.player?.stop()
+     stopForeground(Service.STOP_FOREGROUND_REMOVE)
+     stopSelf()
++    android.os.Process.killProcess(android.os.Process.myPid())
+   }
+ 
+   override fun onDestroy() {
 diff --git a/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/TrackPlayer.kt b/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/TrackPlayer.kt
 index b85ed0e..a477e8e 100644
 --- a/node_modules/react-native-queue-player/android/src/main/java/com/margelo/nitro/queueplayer/TrackPlayer.kt
