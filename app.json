@@ -56,8 +56,7 @@
     "web": {
       "favicon": "./src/assets/favicon.png"
     },
-    "plugins": [
-      "./withAndroidStopWithTask.js",
+    "plugins": [    
       "expo-router",
       [
         "react-native-bootsplash",
