@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: 1
+      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m"
 
     steps:
       - name: Checkout repository
@@ -34,10 +35,16 @@ jobs:
       - name: Expo Prebuild
         run: npx expo prebuild --platform android --clean
 
-      - name: Build Standalone Release APK (Disable R8)
+      - name: Force Disable Minification/R8 in Gradle
+        run: |
+          sed -i 's/minifyEnabled true/minifyEnabled false/g' android/app/build.gradle
+          sed -i 's/shrinkResources true/shrinkResources false/g' android/app/build.gradle
+          echo "android.enableR8=false" >> android/gradle.properties
+
+      - name: Build Standalone Release APK
         run: |
           cd android
-          ./gradlew assembleRelease --no-daemon -x test -PminifyEnabled=false
+          ./gradlew assembleRelease --no-daemon -x test
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -45,3 +52,4 @@ jobs:
           name: substreamer-apk
           path: android/app/build/outputs/apk/release/app-release.apk
           retention-days: 7
+          
